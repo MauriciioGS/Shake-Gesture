@@ -6,12 +6,35 @@
 //
 
 import UIKit
+import AVKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, AVAudioPlayerDelegate {
+    
+    var audioPlayer = AVAudioPlayer()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        
+        loadSong()
+    }
+    
+    func loadSong() {
+        guard let url = Bundle.main.url(forResource: "loud_bang", withExtension: "mp3")
+        else {
+            print("Error no se localiza el recurso")
+            return
+        }
+        
+        do {
+            audioPlayer = try AVAudioPlayer(contentsOf: url)
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
+    override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
+        print("Sacudida!")
+        audioPlayer.play()
     }
 
 
